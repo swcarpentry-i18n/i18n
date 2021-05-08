@@ -82,7 +82,7 @@ def main(path_translation, path_lesson):
             origin.set_url(origin_url)
         else:
             origin = repo.create_remote('origin', origin_url)
-        origin.push('master')#('+refs/heads/*:refs/remotes/origin/*')
+        origin.push('main')#('+refs/heads/*:refs/remotes/origin/*')
     # 4) create submodule from translation.
     locale_sm = next(filter(lambda x: x.name == lang, lesson_repo.submodules), None)
     if not locale_sm:
@@ -97,6 +97,7 @@ def main(path_translation, path_lesson):
         lesson_repo.index.add([locale_sm])
 
     lesson_repo.index.commit(f"[Translations] {action} {lang} language")
+    # FIXME that commit does it in a detach mode.
     # 5) push it!
     lesson_repo.remotes.topush.push()
     print(f"Repository {lesson_repo.remotes.origin.url} updated with {lang}.")
